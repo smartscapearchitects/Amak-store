@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMAK TECHNOLOGY — Bearings, Power Tillers & WhatsApp Order</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --primary: #0f172a;
+      --accent: #16a34a;
+      --accent-hover: #15803d;
+      --blue: #1d4ed8;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    header {
+      background: var(--primary);
+      color: #ffffff;
+      padding: 18px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.14);
+    }
+    .header-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand h1 { margin: 0; font-size: 1.3rem; letter-spacing: 0.4px; }
+    .brand p { margin: 3px 0 0; font-size: 0.85rem; color: #cbd5e1; }
+    .cart-pill {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+    .cart-pill:hover { background: var(--accent-hover); }
+
+    .container { max-width: 1040px; margin: 18px auto; padding: 0 16px 40px; }
+
+    .toolbar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .cats { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cat-btn {
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .cat-btn.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+    .search-box {
+      flex: 1;
+      min-width: 220px;
+      max-width: 320px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    .prod-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #eff6ff;
+      color: var(--blue);
+      width: fit-content;
+    }
+    .badge.tiller {
+      background: #f0fdf4;
+      color: var(--accent-hover);
+    }
+    .prod-title { margin: 6px 0 4px; font-size: 1.05rem; font-weight: 700; }
+    .prod-desc { margin: 0; font-size: 0.84rem; color: var(--muted); line-height: 1.35; }
+    .prod-price { font-size: 1.15rem; font-weight: 800; color: var(--text); }
+    .add-row { display: flex; gap: 8px; align-items: center; }
+    .add-row input {
+      width: 72px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+    .add-row button {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      background: var(--blue);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    /* Order / Cart Panel */
+    .order-panel {
+      margin-top: 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .order-panel h2 { margin: 0 0 12px; font-size: 1.15rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td {
+      padding: 9px 6px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .qty-mini {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .qty-mini button {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .rm-btn {
+      border: none;
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 5px 9px;
+      cursor: pointer;
+    }
+    .total-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 2px solid var(--border);
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 4px; }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+    .wa-btn {
+      margin-top: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 13px 16px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .wa-btn:hover { background: var(--accent-hover); }
+    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <h1>AMAK TECHNOLOGY</h1>
+        <p>Bearings, Power Tillers &amp; Vipuri — Kariakoo, Dar es Salaam</p>
+      </div>
+      <button type="button" class="cart-pill" onclick="scrollToOrder()">
+        Order Yangu (<span id="headerCount">0</span>) • <span id="headerTotal">0</span> TZS
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="toolbar">
+      <div class="cats">
+        <button type="button" class="cat-btn active" onclick="setCategory('all', this)">Zote</button>
+        <button type="button" class="cat-btn" onclick="setCategory('bearing', this)">Bearings</button>
+        <button type="button" class="cat-btn" onclick="setCategory('tiller', this)">Power Tillers</button>
+      </div>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Tafuta namba ya bearing au power tiller..." oninput="renderProducts()" />
+      </div>
+    </div>
+
+    <div class="grid" id="productGrid"></div>
+
+    <div class="order-panel" id="orderSection">
+      <h2>Weka Order Yako (Inatumwa Moja kwa Moja WhatsApp)</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Bidhaa</th>
+              <th>Bei</th>
+              <th>Idadi</th>
+              <th>Jumla</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="cartBody"></tbody>
+        </table>
+      </div>
+
+      <div class="total-box">
+        <span>Jumla Kuu ya Order:</span>
+        <span><span id="cartGrandTotal">0</span> TZS</span>
+      </div>
+
+      <div class="form-grid">
+        <div>
+          <label for="custName">Jina Lako / Kampuni</label>
+          <input type="text" id="custName" placeholder="Mf. Chasama / Juma" />
+        </div>
+        <div>
+          <label for="custPhone">Namba ya Simu / Eneo la Kupokelea</label>
+          <input type="text" id="custPhone" placeholder="Mf. 07xx xxx xxx — Igunga / Kariakoo" />
+        </div>
+      </div>
+      <div style="margin-top:10px;">
+        <label for="custNote">Maelezo ya Ziada (Si lazima)</label>
+        <input type="text" id="custNote" placeholder="Mf. Nahitaji risiti ya 58mm au usafiri wa basi..." />
+      </div>
+
+      <button type="button" class="wa-btn" onclick="sendOrderWhatsApp()">
+        Tuma Order Moja kwa Moja WhatsApp
+      </button>
+      <div class="hint">
+        *Ukibonyeza kitufe hicho, WhatsApp itafunguka ikiwa na order yako tayari imeandikwa kwa namba ya duka la AMAK TECHNOLOGY.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // BADILISHA NAMBA HII YA WHATSAPP KWA NAMBA YA DUKA LAKO (mfano 2557XXXXXXXX)
+    const AMAK_WHATSAPP_NUMBER = "255700000000";
+
+    // ORODHA YA BIDHAA: Hariri majina, maelezo, na bei (TZS) kulingana na stock yako ya sasa
+    const PRODUCTS = [
+      { id: "b-32313", cat: "bearing", name: "Bearing 32313", desc: "Taper roller bearing kwa mizigo mizito na magari.", price: 38000 },
+      { id: "b-6407", cat: "bearing", name: "Bearing 6407", desc: "Deep groove ball bearing imara ya kudumu.", price: 25000 },
+      { id: "b-30311d", cat: "bearing", name: "Bearing 30311D", desc: "Bearing ya kazi nzito kwa mitambo na axle.", price: 23500 },
+      { id: "b-6305", cat: "bearing", name: "Bearing 6305", desc: "Standard bearing inayotumika sana kwenye mitambo na pikipiki.", price: 3000 },
+      { id: "pt-12hp", cat: "tiller", name: "Power Tiller 12HP (Complete)", desc: "Mashine ya kulimia shamba yenye injini imara na rotavator.", price: 3850000 },
+      { id: "pt-15hp", cat: "tiller", name: "Power Tiller 15HP Heavy Duty", desc: "Kwa mashamba makubwa na udongo mgumu, inakuja na vifaa vyake.", price: 4450000 },
+      { id: "pt-blade", cat: "tiller", name: "Rotavator Blades Set (Power Tiller)", desc: "Seti ya visu vya kulimia vya power tiller vyenye uimara wa hali ya juu.", price: 95000 },
+      { id: "pt-belt", cat: "tiller", name: "V-Belt / Clutch Kit (Power Tiller)", desc: "Kifaa cha kupitisha nguvu na clutch cha power tiller.", price: 45000 }
+    ];
+
+    let activeCat = "all";
+    let cart = [];
+
+    function fmt(n) {
+      return Number(n || 0).toLocaleString("en-US");
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[m]));
+    }
+
+    function setCategory(cat, btn) {
+      activeCat = cat;
+      document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const q = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+      const grid = document.getElementById("productGrid");
+
+      const filtered = PRODUCTS.filter(p => {
+        const matchCat = activeCat === "all" || p.cat === activeCat;
+        const matchQ = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+        return matchCat && matchQ;
+      });
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="prod-card">
+          <div>
+            <span class="badge ${p.cat === "tiller" ? "tiller" : ""}">${p.cat === "tiller" ? "Power Tiller" : "Bearing"}</span>
+            <h3 class="prod-title">${escapeHtml(p.name)}</h3>
+            <p class="prod-desc">${escapeHtml(p.desc)}</p>
+          </div>
+          <div>
+            <div class="prod-price">${fmt(p.price)} TZS</div>
+            <div class="add-row" style="margin-top:8px;">
+              <input type="number" id="qty-${p.id}" value="1" min="1" step="1" />
+              <button type="button" onclick="addToCart('${p.id}')">+ Weka Order</button>
+            </div>
+          </div>
+        </div>
+      `).join("") || `<p style="color:var(--muted);">Hakuna bidhaa iliyopatikana kwa utafutaji huo.</p>`;
+    }
+
+    function addToCart(id) {
+      const prod = PRODUCTS.find(p => p.id === id);
+      if (!prod) return;
+      const qtyInput = document.getElementById("qty-" + id);
+      const qty = Math.max(1, parseInt(qtyInput?.value || "1", 10) || 1);
+
+      const existing = cart.find(c => c.id === id);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ id: prod.id, name: prod.name, price: prod.price, qty });
+      }
+      renderCart();
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(c => c.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(c => c.id !== id);
+      }
+      renderCart();
+    }
+
+    function removeItem(id) {
+      cart = cart.filter(c => c.id !== id);
+      renderCart();
+    }
+
+    function renderCart() {
+      const body = document.getElementById("cartBody");
+      let totalQty = 0;
+      let grandTotal = 0;
+
+      if (!cart.length) {
+        body.innerHTML = `<tr><td colspan="5" style="color:var(--muted);">Bado hujaweka bidhaa yoyote kwenye order. Gusa "+ Weka Order" juu.</td></tr>`;
+      } else {
+        body.innerHTML = cart.map(c => {
+          const sub = c.price * c.qty;
+          totalQty += c.qty;
+          grandTotal += sub;
+          return `
+            <tr>
+              <td><strong>${escapeHtml(c.name)}</strong></td>
+              <td>${fmt(c.price)}</td>
+              <td>
+                <div class="qty-mini">
+                  <button type="button" onclick="changeQty('${c.id}', -1)">-</button>
+                  <span>${c.qty}</span>
+                  <button type="button" onclick="changeQty('${c.id}', 1)">+</button>
+                </div>
+              </td>
+              <td><strong>${fmt(sub)}</strong></td>
+              <td><button type="button" class="rm-btn" onclick="removeItem('${c.id}')">X</button></td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      document.getElementById("headerCount").textContent = totalQty;
+      document.getElementById("headerTotal").textContent = fmt(grandTotal);
+      document.getElementById("cartGrandTotal").textContent = fmt(grandTotal);
+    }
+
+    function scrollToOrder() {
+      document.getElementById("orderSection").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function sendOrderWhatsApp() {
+      if (!cart.length) {
+        alert("Tafadhali ongeza angalau bidhaa moja kwenye order kabla ya kutuma WhatsApp.");
+        return;
+      }
+
+      const name = (document.getElementById("custName").value || "").trim() || "Mteja";
+      const phoneLoc = (document.getElementById("custPhone").value || "").trim() || "Haijatajwa";
+      const note = (document.getElementById("custNote").value || "").trim();
+
+      let grandTotal = 0;
+      const lines = cart.map((c, idx) => {
+        const sub = c.price * c.qty;
+        grandTotal += sub;
+        return `${idx + 1}. ${c.name} — ${fmt(c.price)} x ${c.qty} = *${fmt(sub)} TZS*`;
+      });
+
+      const msg = [
+        `*ORDER MPYA — AMAK TECHNOLOGY*`,
+        `Mteja: *${name}*`,
+        `Simu / Eneo: *${phoneLoc}*`,
+        `-----------------------`,
+        ...lines,
+        `-----------------------`,
+        `*JUMLA KUU: ${fmt(grandTotal)} TZS*`,
+        note ? `Maelezo: ${note}` : ""
+      ].filter(Boolean).join("\n");
+
+      const cleanPhone = AMAK_WHATSAPP_NUMBER.replace(/\D/g, "");
+      const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank");
+    }
+
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>
