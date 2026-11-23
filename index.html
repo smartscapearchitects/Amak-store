@@ -137,12 +137,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
     .prod-img-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+    .img-fallback-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 8px;
+      text-align: center;
     }
     .badge {
       display: inline-block;
@@ -182,7 +190,6 @@
       cursor: pointer;
     }
 
-    /* Order / Cart Panel */
     .order-panel {
       margin-top: 24px;
       background: var(--card);
@@ -335,81 +342,27 @@
         Tuma Order Moja kwa Moja WhatsApp
       </button>
       <div class="hint">
-        *Ukibonyeza kitufe hicho, WhatsApp itafunguka ikiwa na order yako tayari imeandikwa kwa namba ya duka la AMAK TECHNOLOGY.
+        *Picha za bidhaa zinavotwa kiotomatiki kutoka kwenye folda ya <code>images/</code> kwa jina la <code>id</code> ya bidhaa (mfano <code>images/b-32313.jpg</code> au <code>images/b-32313.png</code>).
       </div>
     </div>
   </div>
 
   <script>
     // BADILISHA NAMBA HII YA WHATSAPP KWA NAMBA YA DUKA LAKO (mfano 2557XXXXXXXX)
-    const AMAK_WHATSAPP_NUMBER = "255750606021";
+    const AMAK_WHATSAPP_NUMBER = "255700000000";
+    const HESABU_APP_URL = "https://smartscapearchitects.github.io/amak-hesabu.html/";
+    const IMAGES_FOLDER = "./images";
 
-    // Unaweza kuweka URL ya picha halisi kwenye 'img' ya kila bidhaa (mfano ./images/32313.jpg au link ya picha)
+    // Kila bidhaa itatafuta picha kiotomatiki: ./images/<id>.jpg, kisha ./images/<id>.png, kisha ./images/<id>.jpeg
     const PRODUCTS = [
-      {
-        id: "b-32313",
-        cat: "bearing",
-        name: "Bearing 32313",
-        desc: "Taper roller bearing kwa mizigo mizito na magari.",
-        price: 38000,
-        img: "https://placehold.co/600x400/e2e8f0/0f172a?text=Bearing+32313"
-      },
-      {
-        id: "b-6407",
-        cat: "bearing",
-        name: "Bearing 6407",
-        desc: "Deep groove ball bearing imara ya kudumu.",
-        price: 25000,
-        img: "https://placehold.co/600x400/e2e8f0/0f172a?text=Bearing+6407"
-      },
-      {
-        id: "b-30311d",
-        cat: "bearing",
-        name: "Bearing 30311D",
-        desc: "Bearing ya kazi nzito kwa mitambo na axle.",
-        price: 23500,
-        img: "https://placehold.co/600x400/e2e8f0/0f172a?text=Bearing+30311D"
-      },
-      {
-        id: "b-6305",
-        cat: "bearing",
-        name: "Bearing 6305",
-        desc: "Standard bearing inayotumika sana kwenye mitambo na pikipiki.",
-        price: 3000,
-        img: "https://placehold.co/600x400/e2e8f0/0f172a?text=Bearing+6305"
-      },
-      {
-        id: "pt-12hp",
-        cat: "tiller",
-        name: "Power Tiller 12HP (Complete)",
-        desc: "Mashine ya kulimia shamba yenye injini imara na rotavator.",
-        price: 3850000,
-        img: "https://placehold.co/600x400/dcfce7/14532d?text=Power+Tiller+12HP"
-      },
-      {
-        id: "pt-15hp",
-        cat: "tiller",
-        name: "Power Tiller 15HP Heavy Duty",
-        desc: "Kwa mashamba makubwa na udongo mgumu, inakuja na vifaa vyake.",
-        price: 4450000,
-        img: "https://placehold.co/600x400/dcfce7/14532d?text=Power+Tiller+15HP"
-      },
-      {
-        id: "pt-blade",
-        cat: "tiller",
-        name: "Rotavator Blades Set (Power Tiller)",
-        desc: "Seti ya visu vya kulimia vya power tiller vyenye uimara wa hali ya juu.",
-        price: 95000,
-        img: "https://placehold.co/600x400/dcfce7/14532d?text=Rotavator+Blades"
-      },
-      {
-        id: "pt-belt",
-        cat: "tiller",
-        name: "V-Belt / Clutch Kit (Power Tiller)",
-        desc: "Kifaa cha kupitisha nguvu na clutch cha power tiller.",
-        price: 45000,
-        img: "https://placehold.co/600x400/dcfce7/14532d?text=Clutch+%26+Belt+Kit"
-      }
+      { id: "b-32313", cat: "bearing", name: "Bearing 32313", desc: "Taper roller bearing kwa mizigo mizito na magari.", price: 38000 },
+      { id: "b-6407", cat: "bearing", name: "Bearing 6407", desc: "Deep groove ball bearing imara ya kudumu.", price: 25000 },
+      { id: "b-30311d", cat: "bearing", name: "Bearing 30311D", desc: "Bearing ya kazi nzito kwa mitambo na axle.", price: 23500 },
+      { id: "b-6305", cat: "bearing", name: "Bearing 6305", desc: "Standard bearing inayotumika sana kwenye mitambo na pikipiki.", price: 3000 },
+      { id: "pt-12hp", cat: "tiller", name: "Power Tiller 12HP (Complete)", desc: "Mashine ya kulimia shamba yenye injini imara na rotavator.", price: 3850000 },
+      { id: "pt-15hp", cat: "tiller", name: "Power Tiller 15HP Heavy Duty", desc: "Kwa mashamba makubwa na udongo mgumu, inakuja na vifaa vyake.", price: 4450000 },
+      { id: "pt-blade", cat: "tiller", name: "Rotavator Blades Set (Power Tiller)", desc: "Seti ya visu vya kulimia vya power tiller vyenye uimara wa hali ya juu.", price: 95000 },
+      { id: "pt-belt", cat: "tiller", name: "V-Belt / Clutch Kit (Power Tiller)", desc: "Kifaa cha kupitisha nguvu na clutch cha power tiller.", price: 45000 }
     ];
 
     let activeCat = "all";
@@ -425,6 +378,19 @@
       }[m]));
     }
 
+    function handleAutoImageError(imgEl, id) {
+      const step = Number(imgEl.dataset.extStep || "0");
+      const exts = ["png", "jpeg", "webp"];
+      if (step < exts.length) {
+        imgEl.dataset.extStep = String(step + 1);
+        imgEl.src = `${IMAGES_FOLDER}/${id}.${exts[step]}`;
+      } else {
+        imgEl.style.display = "none";
+        const fb = imgEl.parentElement?.querySelector(".img-fallback-label");
+        if (fb) fb.style.display = "block";
+      }
+    }
+
     function setCategory(cat, btn) {
       activeCat = cat;
       document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
@@ -438,31 +404,41 @@
 
       const filtered = PRODUCTS.filter(p => {
         const matchCat = activeCat === "all" || p.cat === activeCat;
-        const matchQ = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q);
+        const matchQ = !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.id.toLowerCase().includes(q);
         return matchCat && matchQ;
       });
 
-      grid.innerHTML = filtered.map(p => `
-        <div class="prod-card">
-          <div>
-            <div class="prod-img-wrap">
-              <img src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.display='none'" />
+      grid.innerHTML = filtered.map(p => {
+        const primarySrc = `${IMAGES_FOLDER}/${p.id}.jpg`;
+        return `
+          <div class="prod-card">
+            <div>
+              <div class="prod-img-wrap">
+                <img
+                  src="${escapeHtml(primarySrc)}"
+                  alt="${escapeHtml(p.name)}"
+                  data-ext-step="0"
+                  loading="lazy"
+                  onerror="handleAutoImageError(this, '${escapeHtml(p.id)}')"
+                />
+                <span class="img-fallback-label" style="display:none;">${escapeHtml(p.name)}<br/>(${escapeHtml(p.id)}.jpg)</span>
+              </div>
+              <div style="margin-top:8px;">
+                <span class="badge ${p.cat === "tiller" ? "tiller" : ""}">${p.cat === "tiller" ? "Power Tiller" : "Bearing"}</span>
+              </div>
+              <h3 class="prod-title">${escapeHtml(p.name)}</h3>
+              <p class="prod-desc">${escapeHtml(p.desc)}</p>
             </div>
-            <div style="margin-top:8px;">
-              <span class="badge ${p.cat === "tiller" ? "tiller" : ""}">${p.cat === "tiller" ? "Power Tiller" : "Bearing"}</span>
+            <div>
+              <div class="prod-price">${fmt(p.price)} TZS</div>
+              <div class="add-row" style="margin-top:8px;">
+                <input type="number" id="qty-${p.id}" value="1" min="1" step="1" />
+                <button type="button" onclick="addToCart('${p.id}')">+ Weka Order</button>
+              </div>
             </div>
-            <h3 class="prod-title">${escapeHtml(p.name)}</h3>
-            <p class="prod-desc">${escapeHtml(p.desc)}</p>
           </div>
-          <div>
-            <div class="prod-price">${fmt(p.price)} TZS</div>
-            <div class="add-row" style="margin-top:8px;">
-              <input type="number" id="qty-${p.id}" value="1" min="1" step="1" />
-              <button type="button" onclick="addToCart('${p.id}')">+ Weka Order</button>
-            </div>
-          </div>
-        </div>
-      `).join("") || `<p style="color:var(--muted);">Hakuna bidhaa iliyopatikana kwa utafutaji huo.</p>`;
+        `;
+      }).join("") || `<p style="color:var(--muted);">Hakuna bidhaa iliyopatikana kwa utafutaji huo.</p>`;
     }
 
     function addToCart(id) {
@@ -534,6 +510,17 @@
       document.getElementById("orderSection").scrollIntoView({ behavior: "smooth" });
     }
 
+    function buildHesabuImportLink(name, cartItems) {
+      const compact = cartItems.map(c => ({
+        n: c.name,
+        p: c.price,
+        q: c.qty
+      }));
+      const payload = { c: name, i: compact };
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+      return `${HESABU_APP_URL}?importOrder=${encodeURIComponent(encoded)}`;
+    }
+
     function sendOrderWhatsApp() {
       if (!cart.length) {
         alert("Tafadhali ongeza angalau bidhaa moja kwenye order kabla ya kutuma WhatsApp.");
@@ -551,6 +538,8 @@
         return `${idx + 1}. ${c.name} — ${fmt(c.price)} x ${c.qty} = *${fmt(sub)} TZS*`;
       });
 
+      const importLink = buildHesabuImportLink(name, cart);
+
       const msg = [
         `*ORDER MPYA — AMAK TECHNOLOGY*`,
         `Mteja: *${name}*`,
@@ -559,7 +548,8 @@
         ...lines,
         `-----------------------`,
         `*JUMLA KUU: ${fmt(grandTotal)} TZS*`,
-        note ? `Maelezo: ${note}` : ""
+        note ? `Maelezo: ${note}` : "",
+        `Fungua kwenye AMAK Hesabu: ${importLink}`
       ].filter(Boolean).join("\n");
 
       const cleanPhone = AMAK_WHATSAPP_NUMBER.replace(/\D/g, "");
