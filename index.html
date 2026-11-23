@@ -26,7 +26,7 @@
     header {
       background: var(--primary);
       color: #ffffff;
-      padding: 18px 16px;
+      padding: 16px;
       position: sticky;
       top: 0;
       z-index: 50;
@@ -38,11 +38,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
-    .brand h1 { margin: 0; font-size: 1.3rem; letter-spacing: 0.4px; }
-    .brand p { margin: 3px 0 0; font-size: 0.85rem; color: #cbd5e1; }
+    .brand h1 { margin: 0; font-size: 1.25rem; letter-spacing: 0.4px; }
+    .brand p { margin: 3px 0 0; font-size: 0.84rem; color: #cbd5e1; }
+    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .hesabu-link {
+      text-decoration: none;
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #475569;
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+    .hesabu-link:hover { background: #334155; }
     .cart-pill {
       background: var(--accent);
       color: #fff;
@@ -50,7 +62,7 @@
       border-radius: 999px;
       padding: 10px 16px;
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       cursor: pointer;
     }
     .cart-pill:hover { background: var(--accent-hover); }
@@ -109,15 +121,32 @@
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 14px;
+      padding: 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 10px;
     }
+    .prod-img-wrap {
+      width: 100%;
+      height: 150px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .prod-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
     .badge {
       display: inline-block;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
       padding: 4px 8px;
       border-radius: 6px;
@@ -209,7 +238,7 @@
     }
     @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
     label { display: block; font-size: 0.82rem; color: var(--muted); margin-bottom: 4px; }
-    input, textarea {
+    input {
       width: 100%;
       padding: 10px;
       border-radius: 8px;
@@ -240,9 +269,14 @@
         <h1>AMAK TECHNOLOGY</h1>
         <p>Bearings, Power Tillers &amp; Vipuri — Kariakoo, Dar es Salaam</p>
       </div>
-      <button type="button" class="cart-pill" onclick="scrollToOrder()">
-        Order Yangu (<span id="headerCount">0</span>) • <span id="headerTotal">0</span> TZS
-      </button>
+      <div class="header-actions">
+        <a class="hesabu-link" href="https://smartscapearchitects.github.io/amak-hesabu.html/" target="_blank" rel="noopener">
+          AMAK Hesabu
+        </a>
+        <button type="button" class="cart-pill" onclick="scrollToOrder()">
+          Order Yangu (<span id="headerCount">0</span>) • <span id="headerTotal">0</span> TZS
+        </button>
+      </div>
     </div>
   </header>
 
@@ -310,16 +344,72 @@
     // BADILISHA NAMBA HII YA WHATSAPP KWA NAMBA YA DUKA LAKO (mfano 2557XXXXXXXX)
     const AMAK_WHATSAPP_NUMBER = "255700000000";
 
-    // ORODHA YA BIDHAA: Hariri majina, maelezo, na bei (TZS) kulingana na stock yako ya sasa
+    // Unaweza kuweka URL ya picha halisi kwenye 'img' ya kila bidhaa (mfano ./images/32313.jpg au link ya picha)
     const PRODUCTS = [
-      { id: "b-32313", cat: "bearing", name: "Bearing 32313", desc: "Taper roller bearing kwa mizigo mizito na magari.", price: 38000 },
-      { id: "b-6407", cat: "bearing", name: "Bearing 6407", desc: "Deep groove ball bearing imara ya kudumu.", price: 25000 },
-      { id: "b-30311d", cat: "bearing", name: "Bearing 30311D", desc: "Bearing ya kazi nzito kwa mitambo na axle.", price: 23500 },
-      { id: "b-6305", cat: "bearing", name: "Bearing 6305", desc: "Standard bearing inayotumika sana kwenye mitambo na pikipiki.", price: 3000 },
-      { id: "pt-12hp", cat: "tiller", name: "Power Tiller 12HP (Complete)", desc: "Mashine ya kulimia shamba yenye injini imara na rotavator.", price: 3850000 },
-      { id: "pt-15hp", cat: "tiller", name: "Power Tiller 15HP Heavy Duty", desc: "Kwa mashamba makubwa na udongo mgumu, inakuja na vifaa vyake.", price: 4450000 },
-      { id: "pt-blade", cat: "tiller", name: "Rotavator Blades Set (Power Tiller)", desc: "Seti ya visu vya kulimia vya power tiller vyenye uimara wa hali ya juu.", price: 95000 },
-      { id: "pt-belt", cat: "tiller", name: "V-Belt / Clutch Kit (Power Tiller)", desc: "Kifaa cha kupitisha nguvu na clutch cha power tiller.", price: 45000 }
+      {
+        id: "b-32313",
+        cat: "bearing",
+        name: "Bearing 32313",
+        desc: "Taper roller bearing kwa mizigo mizito na magari.",
+        price: 38000,
+        img: "https://placehold.co/600x400/e2e8f0/0f172a?text=Bearing+32313"
+      },
+      {
+        id: "b-6407",
+        cat: "bearing",
+        name: "Bearing 6407",
+        desc: "Deep groove ball bearing imara ya kudumu.",
+        price: 25000,
+        img: "https://placehold.co/600x400/e2e8f0/0f172a?text=Bearing+6407"
+      },
+      {
+        id: "b-30311d",
+        cat: "bearing",
+        name: "Bearing 30311D",
+        desc: "Bearing ya kazi nzito kwa mitambo na axle.",
+        price: 23500,
+        img: "https://placehold.co/600x400/e2e8f0/0f172a?text=Bearing+30311D"
+      },
+      {
+        id: "b-6305",
+        cat: "bearing",
+        name: "Bearing 6305",
+        desc: "Standard bearing inayotumika sana kwenye mitambo na pikipiki.",
+        price: 3000,
+        img: "https://placehold.co/600x400/e2e8f0/0f172a?text=Bearing+6305"
+      },
+      {
+        id: "pt-12hp",
+        cat: "tiller",
+        name: "Power Tiller 12HP (Complete)",
+        desc: "Mashine ya kulimia shamba yenye injini imara na rotavator.",
+        price: 3850000,
+        img: "https://placehold.co/600x400/dcfce7/14532d?text=Power+Tiller+12HP"
+      },
+      {
+        id: "pt-15hp",
+        cat: "tiller",
+        name: "Power Tiller 15HP Heavy Duty",
+        desc: "Kwa mashamba makubwa na udongo mgumu, inakuja na vifaa vyake.",
+        price: 4450000,
+        img: "https://placehold.co/600x400/dcfce7/14532d?text=Power+Tiller+15HP"
+      },
+      {
+        id: "pt-blade",
+        cat: "tiller",
+        name: "Rotavator Blades Set (Power Tiller)",
+        desc: "Seti ya visu vya kulimia vya power tiller vyenye uimara wa hali ya juu.",
+        price: 95000,
+        img: "https://placehold.co/600x400/dcfce7/14532d?text=Rotavator+Blades"
+      },
+      {
+        id: "pt-belt",
+        cat: "tiller",
+        name: "V-Belt / Clutch Kit (Power Tiller)",
+        desc: "Kifaa cha kupitisha nguvu na clutch cha power tiller.",
+        price: 45000,
+        img: "https://placehold.co/600x400/dcfce7/14532d?text=Clutch+%26+Belt+Kit"
+      }
     ];
 
     let activeCat = "all";
@@ -355,7 +445,12 @@
       grid.innerHTML = filtered.map(p => `
         <div class="prod-card">
           <div>
-            <span class="badge ${p.cat === "tiller" ? "tiller" : ""}">${p.cat === "tiller" ? "Power Tiller" : "Bearing"}</span>
+            <div class="prod-img-wrap">
+              <img src="${escapeHtml(p.img)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.style.display='none'" />
+            </div>
+            <div style="margin-top:8px;">
+              <span class="badge ${p.cat === "tiller" ? "tiller" : ""}">${p.cat === "tiller" ? "Power Tiller" : "Bearing"}</span>
+            </div>
             <h3 class="prod-title">${escapeHtml(p.name)}</h3>
             <p class="prod-desc">${escapeHtml(p.desc)}</p>
           </div>
